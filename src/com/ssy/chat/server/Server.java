@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Server extends JFrame {
@@ -45,6 +46,15 @@ public class Server extends JFrame {
         this.initComponents();
     }
 
+    // 更新服务器端的在线用户列表
+    public void setUserList() {
+        this.jTextArea1.setText(""); // 先清空之前的用户列表
+
+        for (Iterator<String> iter = map.keySet().iterator(); iter.hasNext();) {
+            this.jTextArea1.append(iter.next() + "\n");
+        }
+    }
+
     // 初始化界面
     private void initComponents() {
         jPanel1 = new JPanel();
@@ -77,20 +87,18 @@ public class Server extends JFrame {
             }
         });
 
-        this.jTextArea1.setEditable(false);
-        this.jTextArea1.setForeground(new Color(245, 0, 0));
-
         jPanel1.add(jLabel1);
         jPanel1.add(jLabel2);
         jPanel1.add(jLabel3);
         jPanel1.add(jTextField1);
         jPanel1.add(jButton);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(30);
         jTextArea1.setForeground(new Color(0, 51, 204));
         jTextArea1.setRows(20);
 
-        jScrollPane1.setViewportView(jTextArea1);
+        jScrollPane1.setViewportView(jTextArea1); // 将JTextArea放置到JScrollPane中
 
         jPanel2.add(jScrollPane1);
 
@@ -98,6 +106,7 @@ public class Server extends JFrame {
         this.getContentPane().add(jPanel2, BorderLayout.SOUTH);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setAlwaysOnTop(true);
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
@@ -130,7 +139,21 @@ public class Server extends JFrame {
             return;
         }
 
+        int port = Integer.parseInt(hostPort);
 
+        thread = new ConnectThread(this, CONNECT_THREAD, port);
+        thread.start();
+
+//        thread2 = new ExitThread(this);
+//        thread2.start();
+//
+//        thread3 = new ServerUDP(this);
+//        thread3.start();
+
+        this.jButton.setText("运行中");
+        this.jLabel2.setText("运行中");
+        this.jTextField1.setEnabled(false);
+        this.jButton.setEnabled(false);
     }
 
     public Map getMap() {

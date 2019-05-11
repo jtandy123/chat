@@ -41,7 +41,7 @@ public class ConnectThread extends Thread {
     public void run() {
         while(true) {
             try {
-                this.socket = serverSocket.accept();
+                this.socket = serverSocket.accept(); // 会阻塞服务器端ConnectThread进程，等待客户端连接
 
                 inputStream = socket.getInputStream();
                 outputStream = socket.getOutputStream();
@@ -74,7 +74,7 @@ public class ConnectThread extends Thread {
 
                     map.put(username, clientPort);
 
-                    // server.setUserList();
+                    server.setUserList();
 
                     outputStream.write(info2.getBytes());
                     inputStream.close();
@@ -102,7 +102,7 @@ public class ConnectThread extends Thread {
                         int index_ = temp.indexOf("_");
                         int lastIndex_ = temp.lastIndexOf("_");
                         int port = Integer.parseInt(temp.substring(index_ + 1, lastIndex_));
-                        String address = temp.substring(lastIndex_ +1);
+                        String address = temp.substring(lastIndex_ + 1);
 
                         InetAddress clientAddress = InetAddress.getByName(address);
 

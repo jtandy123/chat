@@ -60,8 +60,7 @@ public class ClientConnectThread extends Thread {
             int randomPort2 = CharacterUtil.randomPort2;
 
             InetAddress address = InetAddress.getLocalHost(); // 得到客户端地址信息
-            String clientAddress = address.toString();
-            System.out.println(clientAddress);
+            String clientAddress = address.toString(); // L-004773/127.0.0.1
             int l = clientAddress.indexOf("/");
             clientAddress = clientAddress.substring(l + 1); // 客户端ip地址
             // 客户端刚登陆时向服务器端所发送的信息
@@ -79,6 +78,31 @@ public class ClientConnectThread extends Thread {
                 JOptionPane.showMessageDialog(frame, "用户名与现有用户重复，请更换用户名！", "错误", JOptionPane.ERROR_MESSAGE);
                 socket.close();
                 is.close();
+            }
+
+            int index = temp.indexOf("@@@");
+            String result = temp.substring(0, index);
+            if (CharacterUtil.SUCCESS.equals(result)) {
+                System.out.println(temp.substring(index + 3));
+                CharacterUtil.SERVER_PORT = temp.substring(index + 3);
+            }
+
+            ChatClient chatClient = new ChatClient(this);
+            chatClient.setVisible(true);
+            frame.setVisible(false);
+
+            acceptMessageThread = new AcceptMessageThread(chatClient);
+            acceptMessageThread.start();
+
+            acceptUserListThread = new AcceptUserListThread(chatClient);
+            acceptUserListThread.start();
+
+            while(flag) {
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         } catch (IOException e) {

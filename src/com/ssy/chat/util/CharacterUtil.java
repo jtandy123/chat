@@ -8,6 +8,10 @@ public class CharacterUtil {
 
     public static final String SUCCESS = "SUCCESS";
 
+    public static int PORT = generatePort();
+
+    public static int PORT2 = generatePort();
+
     public static String SERVER_HOST; // 服务器地址信息
 
     public static String SERVER_PORT; // 服务器端口号
@@ -17,10 +21,6 @@ public class CharacterUtil {
     public static int randomPort = generatePort(); // 客户端接收消息的端口号
 
     public static int randomPort2 = generatePort(); // 客户端接收用户列表的端口号
-
-    public static int PORT = generatePort();
-
-    public static int PORT2 = generatePort();
 
     public static boolean isEmpty(String str) {
         return null == str || str.length() == 0;
@@ -56,5 +56,14 @@ public class CharacterUtil {
 
     public static boolean isUsernameDuplicated(Map map, String username) {
         return map.containsKey(username);
+    }
+
+    public static int[] string2Array(String str) {
+        String[] arr = str.split("_");
+        int[] result = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            result[i] = Integer.parseInt(arr[i]);
+        }
+        return result;
     }
 }
