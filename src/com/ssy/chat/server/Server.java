@@ -38,7 +38,7 @@ public class Server extends JFrame {
 
     private static Thread thread3;
 
-    private Map map = new HashMap<>(); // 用户名与端口号的映射
+    private Map<String, String> map = new HashMap<>(); // 用户名与端口号的映射
 
     public Server(String name) {
         super(name);
@@ -144,8 +144,8 @@ public class Server extends JFrame {
         thread = new ConnectThread(this, CONNECT_THREAD, port);
         thread.start();
 
-//        thread2 = new ExitThread(this);
-//        thread2.start();
+        thread2 = new ExitThread(this);
+        thread2.start();
 //
 //        thread3 = new ServerUDP(this);
 //        thread3.start();
